@@ -1,7 +1,7 @@
 let knowledge = 0;
 let mentalHealth = 100;
 let time = 50;
-let currentSkills = 0;
+let currentCert = 0;
 let fighting;
 let monsterHealth;
 let inventory = ["Intro to HelpDesk"];
@@ -15,7 +15,7 @@ const mentalHealthText = document.querySelector("#mentalHealthText");
 const timeText = document.querySelector("#timeText");
 const monsterStats = document.querySelector("#monsterStats");
 const monsterNameText = document.querySelector("#monsterName");
-const monsterHealthText = document.querySelector("monsterHealth");
+const monsterHealthText = document.querySelector("#monsterHealth");
 
 const cert = [
     {
@@ -64,7 +64,7 @@ const locations = [
     {
         name: "CBTnuggets",
         "button text": ["Dont Study Today (10 Hours)", "Study the certifications (30 Hours)", "Go to HelpDesk"],
-        "button functions": [gainMentalHealth, gainKnowledge, helpDesk],
+        "button functions": [gainMentalHealth, gainCert, helpDesk],
         text: "You are at CBTnuggets, What do you want to do?"
     },
     {
@@ -96,6 +96,12 @@ const locations = [
         "button text": ["Replay", "Replay", "Replay"],
         "button functions": [restart, restart, restart],
         text: "You have beat the issue. You escape the grasps of Steve."
+    },
+    {
+        name: "easter egg",
+        "button text": ["2", "7", "Go to HelpDesk"],
+        "button functions": [pickTwo, pickSeven, helpDesk],
+        text: "You find a weird keyboard with the number pad glowing and a stickey note saying pick one. Will you push a key or will you go back to your desk? I wonder what would happen if you pushed one..."
     }
 
 
@@ -144,27 +150,23 @@ function gainMentalHealth() {
 
 }
 
-function gainKnowledge() {
-
-}
-
 function gainCert() {
-    if (currentSkills < skill.length - 1) {
+    if (currentCert < cert.length - 1) {
         if (time >= 30) {
             time -= 30;
-            currentSkills++;
+            currentCert++;
             timeText.innerText = time;
-            let newSkill = skill[currentSkills].name;
-            text.innerText = "You have earned a" + newSkill + ".";
-            inventory.push(newSkill);
-            text.innerText += " In your inventory you have: " + inventory;
-        }else {
-            text.innerText = "You do not have enough time to learn a new Certification";
-        } 
-    }   else {
-        text.innerText = "You already have the best certification!";
-        button2.innerText = "Dont play Video Games to gain more time."
-        button2.onclick = noVideoGames
+            let newCert = cert[currentCert].name;
+            text.innerText = "You now have the " + newCert + ". ";
+            inventory.push(newCert);
+            text.innerText += " You have learned: " + inventory;
+        } else {
+            text.innerText = "You do not have enough time to study.";
+        }
+    } else {
+        text.innerText = "you already achived all the certs!";
+        button2.innerText = "Study tonight and skip Video Games?";
+        button2.onClick = noVideoGames;
     }
 }
 
@@ -180,24 +182,24 @@ function noVideoGames() {
 }
 
 function passwordReset() {
-    fighting =0;
+    fighting = 0;
     goFight();
 }
 
 function printerIssue() {
-    fighting =1;
+    fighting = 1;
     goFight();
 }
 
 function fightSteve() {
-    fighting =2;
+    fighting = 2;
     goFight();
-    
+
 }
 
 function goFight() {
     update(locations[3]);
-    monsterHealth = monsters[fighting].mentalHealth;
+    monsterHealth = monsters[fighting].monsterHealth;
     monsterStats.style.display = "block";
     monsterNameText.innerText = monsters[fighting].name;
     monsterHealthText.innerText = monsterHealth;
@@ -206,27 +208,31 @@ function goFight() {
 
 function clickFiercly() {
     text.innerText = monsters[fighting].name + " attacks, you decide to Click Fiercly to confuse the " + monsters[fighting].name + ".";
-    
+
 }
 
 function reboot() {
     text.innerText = monsters[fighting].name + " attacks. ";
-    text.innerText = "You decide to reboot the computer to try to resolve the " + monsters[fighting].name + ".";
-
-    if (isMonsterHit()) {
-        mentalHealth -= getMonsterAttackValue(monsters[fighting].level);
-    } else {
-        text.innerText += " You miss."
-    }
-
-    monsterHealth -= skill[currentSkills].power = Math.floor(Math.random() * knowledge) + 1;
+    text.innerText = "You decide to use your " + cert[currentCert].name + ".";
+    mentalHealth -= monsters[fighting].level;
+    monsterHealth -= cert[currentCert].power + Math.floor(Math.random() * knowledge) + 1;;
     mentalHealthText.innerText = mentalHealth;
     monsterHealthText.innerText = monsterHealth;
     if (mentalHealth <= 0) {
         lose();
     } else if (monsterHealth <= 0) {
-            fighting === 2 ? winGame() : defeatMonster();
+        fighting === 2 ? winGame() : defeatMonster();
     }
+    if (Math.random() <= .1 && inventory.lenght !== 1) {
+        text.innerText += " Your " + inventory.pop() + " expired.";
+        currentCert--;
+    }
+}
+
+if (isMonsterHit()) {
+    mentalHealth -= getMonsterAttackValue(monsters[fighting].level);
+} else {
+    text.innerText += " You fail the reboot."
 }
 
 function getMonsterAttackValue(level) {
@@ -235,7 +241,7 @@ function getMonsterAttackValue(level) {
 };
 
 function isMonsterHit() {
-    return Math.random() > .2 || health < 20
+    return Math.random() > .2 || monsterHealth < 20
 }
 
 
@@ -266,6 +272,37 @@ function restart() {
     timeText.innerText = time;
     mentalHealthText.innerText = mentalHealth;
     knowledgeText.innerText = knowledge;
-    helpDesk();    
+    helpDesk();
 }
 
+function easterEgg() {
+    update(locations[7]);
+}
+
+function pickTwo() {
+    pick(2);
+}
+
+function pickSeven() {
+    pick(7);
+}
+
+function pick(guess) {
+    let numbers = []
+    while (numbers.length < 10) {
+        numbers.push(Math.floor(Math.random() * 11))
+    }
+
+    text.innerText = "You picked " + guess + ".  Here are the keys:\n";
+
+    for (let i = 0; i < 10; i++) {
+        text.innerText += numbers[i] + "\n";
+    }
+
+    if (numbers.indexOf(guess) !== -1) {
+        text.innerText += "Weird, nothing happened. `Or so you thought, just then you feel a wave of relief. You gained 100 hours."
+        time += 100;
+        timeText.innerText = time;
+    }
+
+}
