@@ -40,24 +40,24 @@ const monsters = [
     {
         name: "Password Reset",
         level: 2,
-        mentalHealth: 16
+        monsterHealth: 16
     },
     {
         name: "Printer Issues",
         level: 10,
-        mentalHealth: 1000
+        monsterHealth: 1000
     },
     {
         name: "Steve",
         level: 40,
-        health: 315
+        monsterHealth: 315
     }
 ];
 
 const locations = [
     {
         name: "HelpDesk",
-        "button text": ["Go to CBTnuggets", "Go to ServiceNow", "Fight Manager"],
+        "button text": ["Go to CBTnuggets", "Go to ServiceNow", "Fight Steve"],
         "button functions": [goCBT, goServiceNow, fightSteve],
         text: "You are in the HelpDesk, What shold you do next?"
     },
@@ -76,7 +76,7 @@ const locations = [
     {
         name: "fight",
         "button text": ["Click Fiercly", "Reboot", "Give Up"],
-        "button function": [clickFiercly, reboot, helpDesk],
+        "button functions": [clickFiercly, reboot, helpDesk],
         text: "You are trouble shooting a issue"
     },
     {
@@ -87,9 +87,15 @@ const locations = [
     },
     {
         name: "Fail",
-        "button text" : ["Replay", "Replay", "Replay"],
+        "button text": ["Replay", "Replay", "Replay"],
         "button functions": [restart, restart, restart],
         text: "The issue has stumped you. The user is angry and complains to Steve. Your Fired."
+    },
+    {
+        name: "Win",
+        "button text": ["Replay", "Replay", "Replay"],
+        "button functions": [restart, restart, restart],
+        text: "You have beat the issue. You escape the grasps of Steve."
     }
 
 
@@ -128,8 +134,8 @@ function goServiceNow() {
 
 function gainMentalHealth() {
     if (time >= 10) {
-        time -= 10
-        mentalHealth += 10
+        time -= 10;
+        mentalHealth += 10;
         timeText.innerText = time;
         mentalHealthText.innerText = mentalHealth;
     } else {
@@ -186,6 +192,7 @@ function printerIssue() {
 function fightSteve() {
     fighting =2;
     goFight();
+    
 }
 
 function goFight() {
@@ -198,23 +205,39 @@ function goFight() {
 }
 
 function clickFiercly() {
-    text.innerText = "The " + monsters[fighting].name + " attacks. ";
-    text.innerText += " You decide to Click Fiercly.";
-    health -= monsters[figthing].level;
-    monsterHealth -= skill[currentSkills].power + Math.floor(Math.random() * knowledge) + 1;;
+    text.innerText = monsters[fighting].name + " attacks, you decide to Click Fiercly to confuse the " + monsters[fighting].name + ".";
+    
+}
+
+function reboot() {
+    text.innerText = monsters[fighting].name + " attacks. ";
+    text.innerText = "You decide to reboot the computer to try to resolve the " + monsters[fighting].name + ".";
+
+    if (isMonsterHit()) {
+        mentalHealth -= getMonsterAttackValue(monsters[fighting].level);
+    } else {
+        text.innerText += " You miss."
+    }
+
+    monsterHealth -= skill[currentSkills].power = Math.floor(Math.random() * knowledge) + 1;
     mentalHealthText.innerText = mentalHealth;
     monsterHealthText.innerText = monsterHealth;
     if (mentalHealth <= 0) {
         lose();
     } else if (monsterHealth <= 0) {
-        defeatMonster();
+            fighting === 2 ? winGame() : defeatMonster();
     }
-
 }
 
-function reboot() {
-    text.innerText = "You decide to reboot the computer to try to resolve the " +monsters[fighting].name + ".";
+function getMonsterAttackValue(level) {
+    let hit = (level * 5) - (Math.floor(Math.random() * knowledge))
+    return hit
+};
+
+function isMonsterHit() {
+    return Math.random() > .2 || health < 20
 }
+
 
 function defeatMonster() {
     time += Math.floor(monsters[fighting].level ^ 6.7)
@@ -228,6 +251,10 @@ function defeatMonster() {
 function lose() {
     update(locations[5]);
 
+}
+
+function winGame() {
+    update(locations[6]);
 }
 
 function restart() {
