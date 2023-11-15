@@ -39,17 +39,17 @@ const cert = [
 const monsters = [
     {
         name: "Password Reset",
-        level: 2,
+        level: 0,
         monsterHealth: 16
     },
     {
         name: "Printer Issues",
-        level: 10,
-        monsterHealth: 1000
+        level: 1,
+        monsterHealth: 150
     },
     {
         name: "Steve",
-        level: 40,
+        level: 2,
         monsterHealth: 315
     }
 ];
@@ -82,7 +82,7 @@ const locations = [
     {
         name: "Defeat Issue",
         "button text": ["Go to HelpDesk", "Go to Helpdesk", "Go to HelpDesk"],
-        "button functions": [helpDesk, helpDesk, helpDesk],
+        "button functions": [helpDesk, helpDesk, easterEgg],
         text: "The issue has been solved, the User thank's you. You gain knowledge and time to yourself."
     },
     {
@@ -227,12 +227,13 @@ function reboot() {
         text.innerText += " Your " + inventory.pop() + " expired.";
         currentCert--;
     }
-}
 
-if (isMonsterHit()) {
-    mentalHealth -= getMonsterAttackValue(monsters[fighting].level);
-} else {
-    text.innerText += " You fail the reboot."
+    if (isMonsterHit()) {
+        console.log(fighting)
+        mentalHealth -= getMonsterAttackValue(monsters[fighting].level);
+    } else {
+        text.innerText += " You fail the reboot."
+    }
 }
 
 function getMonsterAttackValue(level) {
@@ -300,9 +301,16 @@ function pick(guess) {
     }
 
     if (numbers.indexOf(guess) !== -1) {
-        text.innerText += "Weird, nothing happened. `Or so you thought, just then you feel a wave of relief. You gained 100 hours."
+        text.innerText += "Weird, nothing seemed to happen... `Or so you thought, all of a sudden a rush of releif hits you. Gain 100 hours`";
         time += 100;
         timeText.innerText = time;
+    } else {
+        text.innerText += "Hmmm something feel's off, You then hear a scream from Steve's office. `You lose 25 mental health points`";
+        mentalHealth -= 25;
+        mentalHealthText.innerText = mentalHealth;
+        if (mentalHealth <= 0) {
+            lose();
+        }
     }
 
 }
