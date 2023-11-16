@@ -1,5 +1,5 @@
 body {
-    background-color: darkblue;
+    background-color: red;
 }
 
 #text {
@@ -9,16 +9,14 @@ body {
 }
 
 #game {
-    max-width: 500px;
-    max-height: 400px;
+    max-width: 700px;
+    max-height: 900px;
     background-color: lightgray;
-    color: white;
+    color: red;
     margin: 0 auto;
     padding: 10px;
-}
-
-.float-controller {
-    float: left;
+    flex: 1;
+    text-align: center;
 }
 
 #controls {
@@ -38,23 +36,20 @@ body {
     padding-right: 10px;
 }
 
-#instructions {
-    background-color: lightgray;
-    /* max-width: 500px;
-    max-height: 400px; */
-    color: white;
-    /* margin: 0 auto;
-    padding: 10px; */
-}
-
-.float-instructions {
-    float: left;
-    max-width: 400px;
+#instruction {
+    background-color: black;
+    max-width: 500px;
     max-height: 500px;
+    color: white;
     margin: 0 auto;
-    padding: 30px;
+    padding: 10px;
+    display: flex;
+    font-size: 15px;
+    text-align: end;
 }
 
-.float-game {
-    float: right;
+.text {
+    text-align: center;
 }
+
+

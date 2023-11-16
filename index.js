@@ -33,7 +33,7 @@ const cert = [
     {
         name: "CCNA",
         power: 100
-    }
+    },
 ];
 
 const monsters = [
