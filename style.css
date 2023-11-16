@@ -17,6 +17,10 @@ body {
     padding: 10px;
 }
 
+.float-controller {
+    float: left;
+}
+
 #controls {
     border: 1px;
     padding: 5px;
@@ -32,4 +36,25 @@ body {
 
 .stat {
     padding-right: 10px;
+}
+
+#instructions {
+    background-color: lightgray;
+    /* max-width: 500px;
+    max-height: 400px; */
+    color: white;
+    /* margin: 0 auto;
+    padding: 10px; */
+}
+
+.float-instructions {
+    float: left;
+    max-width: 400px;
+    max-height: 500px;
+    margin: 0 auto;
+    padding: 30px;
+}
+
+.float-game {
+    float: right;
 }
